@@ -1,0 +1,15 @@
+{:ok, socket} = :gen_udp.open(0, [:binary, active: false])
+
+dest = {{127, 0, 0, 1}, 10000}
+:gen_udp.send(socket, dest, "/connect/12345/")
+:gen_udp.recv(socket, 1024) |> IO.inspect(label: "-->")
+:gen_udp.send(socket, dest, "/data/12345/0/hello\n/")
+:gen_udp.recv(socket, 1024) |> IO.inspect(label: "-->")
+:gen_udp.recv(socket, 1024) |> IO.inspect(label: "-->")
+:gen_udp.send(socket, dest, "/ack/12345/6/")
+:gen_udp.send(socket, dest, "/data/12345/6/Hello, world!\n/")
+:gen_udp.recv(socket, 1024) |> IO.inspect(label: "-->")
+:gen_udp.recv(socket, 1024) |> IO.inspect(label: "-->")
+:gen_udp.send(socket, dest, "/ack/12345/20/")
+:gen_udp.send(socket, dest, "/close/12345/")
+:gen_udp.recv(socket, 1024) |> IO.inspect(label: "-->")
